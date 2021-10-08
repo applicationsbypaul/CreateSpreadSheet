@@ -1,8 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using ColorType = DocumentFormat.OpenXml.Office2010.Excel.ColorType;
 
 namespace CreateSpreadSheet
 {
@@ -12,6 +10,10 @@ namespace CreateSpreadSheet
         private static WorkbookPart _workbookPart;
         private static WorksheetPart _worksheetPart;
 
+        private static readonly string[] Header =
+        {
+            "Recall Title", "Store", "Department", "Item Code", "UPC", "Description", "Quantity", "Total Cost"
+        };
 
         public CreateSpreadSheet()
         {
@@ -41,13 +43,24 @@ namespace CreateSpreadSheet
             _worksheetPart.Worksheet = new Worksheet(new SheetData());
         }
 
+        private static void CreateHeader(string[] header, Row row)
+        {
+            foreach (var headerTitle in header)
+            {
+                var cell = new Cell
+                {
+                    CellValue = new CellValue(headerTitle),
+                    DataType = CellValues.String
+                };
+                row.Append(cell);
+            }
+        }
+
         private static void CreateSpreadsheetWorkbook()
         {
-            // Add Sheets to the Workbook.
-            Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
-
-            // Append a new worksheet and associate it with the workbook.
-            Sheet sheet = new Sheet()
+            var sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild(new Sheets());
+            
+            var sheet = new Sheet()
                 {Id = _spreadsheetDocument.WorkbookPart.GetIdOfPart(_worksheetPart), SheetId = 1, Name = "mySheet"};
             sheets.Append(sheet);
 
@@ -61,26 +74,9 @@ namespace CreateSpreadSheet
                 sheetData.Append(row2);
             }
 
-            Cell cell = new Cell
-            {
-                //CellReference = "A1",
-                CellValue = new CellValue("Hello World"),
-                DataType = CellValues.String
-            };
-            
-            Cell cell2 = new Cell
-            {
-                //CellReference = "B1",
-                CellValue = new CellValue("CHECK"),
-                DataType = CellValues.String
-                
-            };
-            row.Append(cell);
-            row.Append(cell2);
+            CreateHeader(Header, row);
             
             _workbookPart.Workbook.Save();
-
-            // Close the document.
             _spreadsheetDocument.Close();
         }
     }
