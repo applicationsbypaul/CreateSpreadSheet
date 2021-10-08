@@ -1,44 +1,87 @@
 ﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using ColorType = DocumentFormat.OpenXml.Office2010.Excel.ColorType;
 
 namespace CreateSpreadSheet
 {
     public class CreateSpreadSheet
     {
+        private static SpreadsheetDocument _spreadsheetDocument;
+        private static WorkbookPart _workbookPart;
+        private static WorksheetPart _worksheetPart;
+
+
         public CreateSpreadSheet()
         {
-            const string path = @"C:\Users\paulf\RiderProjects\CreateSpreadSheet\CreateSpreadSheet\constructorTest.xlsx";
-            CreateSpreadsheetWorkbook(path);
+            const string path =
+                @"C:\Users\pford\Desktop\Developer\CreateSpreadSheet\CreateSpreadSheet\constructorTest.xlsx";
+            CreateSreedsheetDocument(path);
+            AddWorkBookToDocument();
+            AddWorkSheetPartToWorkBookPart();
+            CreateSpreadsheetWorkbook();
         }
-        public static void CreateSpreadsheetWorkbook(string filepath)
+
+
+        private void CreateSreedsheetDocument(string filepath)
         {
-            // Create a spreadsheet document by supplying the filepath.
-            // By default, AutoSave = true, Editable = true, and Type = xlsx.
-            SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.
-                Create(filepath, SpreadsheetDocumentType.Workbook);
+            _spreadsheetDocument = SpreadsheetDocument.Create(filepath, SpreadsheetDocumentType.Workbook);
+        }
 
-            // Add a WorkbookPart to the document.
-            WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
-            workbookpart.Workbook = new Workbook();
+        private void AddWorkBookToDocument()
+        {
+            _workbookPart = _spreadsheetDocument.AddWorkbookPart();
+            _workbookPart.Workbook = new Workbook();
+        }
 
-            // Add a WorksheetPart to the WorkbookPart.
-            WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
-            worksheetPart.Worksheet = new Worksheet(new SheetData());
+        private void AddWorkSheetPartToWorkBookPart()
+        {
+            _worksheetPart = _workbookPart.AddNewPart<WorksheetPart>();
+            _worksheetPart.Worksheet = new Worksheet(new SheetData());
+        }
 
+        private static void CreateSpreadsheetWorkbook()
+        {
             // Add Sheets to the Workbook.
-            Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
-                AppendChild<Sheets>(new Sheets());
+            Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
 
             // Append a new worksheet and associate it with the workbook.
-            Sheet sheet = new Sheet() { Id = spreadsheetDocument.WorkbookPart.
-                GetIdOfPart(worksheetPart), SheetId = 1, Name = "mySheet" };
+            Sheet sheet = new Sheet()
+                {Id = _spreadsheetDocument.WorkbookPart.GetIdOfPart(_worksheetPart), SheetId = 1, Name = "mySheet"};
             sheets.Append(sheet);
 
-            workbookpart.Workbook.Save();
+            var row = new Row();
+            var row2 = new Row();
+
+            var sheetData = _worksheetPart.Worksheet.GetFirstChild<SheetData>();
+            if (sheetData != null)
+            {
+                sheetData.Append(row);
+                sheetData.Append(row2);
+            }
+
+            Cell cell = new Cell
+            {
+                //CellReference = "A1",
+                CellValue = new CellValue("Hello World"),
+                DataType = CellValues.String
+            };
+            
+            Cell cell2 = new Cell
+            {
+                //CellReference = "B1",
+                CellValue = new CellValue("CHECK"),
+                DataType = CellValues.String
+                
+            };
+            row.Append(cell);
+            row.Append(cell2);
+            
+            _workbookPart.Workbook.Save();
 
             // Close the document.
-            spreadsheetDocument.Close();
+            _spreadsheetDocument.Close();
         }
     }
 }

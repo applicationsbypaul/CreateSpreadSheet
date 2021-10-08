@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "pNqfDi0pW2Lm0eZPGzvP48iiEon7Y/yvHyKx/akEWRkWO55PBiC6ua+4ZUiDMRTyirG6sLQ/eim1qzgQMYzZ6g==",
+  "dgSpecHash": "GzJJrKX6AmH1lh4IjtMHqQxgBOuKtZHpzgx9ubq7QEnEKv7PxUZAoqihV5NmAyrRvRjpTSjX2W6lnGae/+BSaA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\paulf\\RiderProjects\\CreateSpreadSheet\\CreateSpreadSheet\\CreateSpreadSheet.csproj",
+  "projectFilePath": "C:\\Users\\pford\\Desktop\\Developer\\CreateSpreadSheet\\CreateSpreadSheet\\CreateSpreadSheet.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\paulf\\.nuget\\packages\\documentformat.openxml\\2.13.1\\documentformat.openxml.2.13.1.nupkg.sha512",
-    "C:\\Users\\paulf\\.nuget\\packages\\system.io.packaging\\4.7.0\\system.io.packaging.4.7.0.nupkg.sha512"
+    "C:\\Users\\pford\\.nuget\\packages\\documentformat.openxml\\2.13.1\\documentformat.openxml.2.13.1.nupkg.sha512",
+    "C:\\Users\\pford\\.nuget\\packages\\system.io.packaging\\4.7.0\\system.io.packaging.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }
